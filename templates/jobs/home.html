@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Find your next opportunity · CareerConnect{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-content">
+    <span class="eyebrow eyebrow-light">YOUR NEXT CHAPTER STARTS HERE</span>
+    <h1>Work that fits your <span>ambition.</span></h1>
+    <p>Discover roles where your skills matter, your ideas count, and your career can grow.</p>
+    <form class="search-panel" method="get" action="{% url 'home' %}">
+      <div class="search-field"><label for="q">Role or company</label><input id="q" name="q" value="{{ query }}" placeholder="e.g. Python Developer"></div>
+      <div class="search-field"><label for="location">Location</label><input id="location" name="location" value="{{ location }}" placeholder="e.g. Hyderabad or Remote"></div>
+      <div class="search-field"><label for="type">Job type</label><select id="type" name="type"><option value="">All types</option>{% for value,label in employment_types %}<option value="{{ value }}" {% if selected_type == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></div>
+      <button class="button search-button" type="submit">Search jobs <span aria-hidden="true">→</span></button>
+    </form>
+    <div class="hero-note"><span class="pulse-dot"></span> Fresh opportunities for your next move</div>
+  </div>
+  <div class="hero-orb orb-one"></div><div class="hero-orb orb-two"></div>
+</section>
+<section class="container listings-section">
+  <div class="section-heading"><div><span class="eyebrow">OPPORTUNITIES</span><h2>Find your next role</h2><p class="muted">Thoughtful opportunities for ambitious people.</p></div><span class="result-count">{{ jobs|length }} job{{ jobs|length|pluralize }}</span></div>
+  {% if jobs %}
+    <div class="job-grid">
+      {% for job in jobs %}
+      <article class="job-card">
+        <div class="job-card-top"><div class="company-logo">{{ job.company|first|upper }}</div><span class="job-type">{{ job.get_employment_type_display }}</span></div>
+        <h3><a href="{% url 'job_detail' job.pk %}">{{ job.title }}</a></h3>
+        <p class="company-name">{{ job.company }}</p>
+        <div class="job-meta"><span>⌖ {{ job.location }}</span>{% if job.salary %}<span>₹ {{ job.salary }}</span>{% endif %}</div>
+        <p class="job-excerpt">{{ job.description|truncatewords:22 }}</p>
+        <div class="job-card-bottom"><span class="posted-date">Posted {{ job.created_at|date:"M j, Y" }}</span><a class="arrow-link" href="{% url 'job_detail' job.pk %}" aria-label="View {{ job.title }}">View role <span>↗</span></a></div>
+      </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="empty-state"><div class="empty-icon">⌕</div><h3>No jobs found just yet</h3><p>Try another title or location, or clear a filter to see more opportunities.</p><a class="button button-outline" href="{% url 'home' %}">Clear filters</a></div>
+  {% endif %}
+  <div class="employer-cta"><div><span class="eyebrow">HIRING TALENT?</span><h2>Meet your next great hire.</h2><p>Share an opportunity with people ready to make an impact.</p></div><a class="button button-light" href="{% url 'register' %}">Post a job <span>→</span></a></div>
+</section>
+{% endblock %}

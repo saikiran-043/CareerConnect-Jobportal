@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Log in · CareerConnect{% endblock %}
+{% block content %}
+<section class="auth-section container">
+  <div class="auth-card">
+    <span class="eyebrow">WELCOME BACK</span><h1>Good to see you.</h1><p class="muted">Log in to continue your career journey.</p>
+    <form method="post" class="stack-form">{% csrf_token %}
+      {% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}
+      <label for="{{ form.username.id_for_label }}">Username</label>{{ form.username }}{{ form.username.errors }}
+      <label for="{{ form.password.id_for_label }}">Password</label>{{ form.password }}{{ form.password.errors }}
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+      <button class="button full" type="submit">Log in</button>
+    </form>
+    <p class="auth-switch">New to CareerConnect? <a href="{% url 'register' %}">Create an account</a></p>
+  </div>
+</section>
+{% endblock %}

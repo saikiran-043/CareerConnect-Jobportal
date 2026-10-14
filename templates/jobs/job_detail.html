@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ job.title }} · CareerConnect{% endblock %}
+{% block content %}
+<section class="container detail-layout">
+  <div class="detail-main">
+    <a class="back-link" href="{% url 'home' %}">← Back to jobs</a>
+    <div class="detail-heading"><div class="company-logo logo-large">{{ job.company|first|upper }}</div><div><span class="job-type">{{ job.get_employment_type_display }}</span><h1>{{ job.title }}</h1><p class="company-name">{{ job.company }} · {{ job.location }}</p></div></div>
+    <div class="content-card"><h2>About the role</h2><div class="long-text">{{ job.description|linebreaks }}</div>{% if job.requirements %}<h2>What we're looking for</h2><div class="long-text">{{ job.requirements|linebreaks }}</div>{% endif %}</div>
+  </div>
+  <aside class="detail-sidebar"><div class="content-card apply-card"><span class="eyebrow">THE OPPORTUNITY</span><h2>{{ job.title }}</h2><p class="company-name">{{ job.company }}</p><div class="sidebar-fact"><span>Location</span><strong>{{ job.location }}</strong></div><div class="sidebar-fact"><span>Employment</span><strong>{{ job.get_employment_type_display }}</strong></div><div class="sidebar-fact"><span>Salary</span><strong>{{ job.salary|default:"Not specified" }}</strong></div><div class="sidebar-fact"><span>Posted</span><strong>{{ job.created_at|date:"M j, Y" }}</strong></div>
+    {% if user.is_authenticated %}{% if user.role == "seeker" %}{% if already_applied %}<div class="notice">You've already applied for this role.</div>{% else %}<a class="button full" href="{% url 'apply_job' job.pk %}">Apply for this job →</a>{% endif %}{% else %}<p class="muted small">Employer accounts cannot apply for jobs.</p>{% endif %}{% else %}<a class="button full" href="{% url 'login' %}?next={% url 'apply_job' job.pk %}">Log in to apply →</a>{% endif %}
+    <p class="small muted">Keep your personal information safe. Only share details needed for your application.</p></div></aside>
+</section>
+{% endblock %}

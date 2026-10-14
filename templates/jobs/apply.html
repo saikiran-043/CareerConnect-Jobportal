@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Apply · {{ job.title }}{% endblock %}
+{% block content %}
+<section class="container form-page"><a class="back-link" href="{% url 'job_detail' job.pk %}">← Back to role</a><div class="form-card"><span class="eyebrow">TAKE THE NEXT STEP</span><h1>Apply for {{ job.title }}</h1><p class="muted">{{ job.company }} · {{ job.location }}</p><form method="post" enctype="multipart/form-data" class="stack-form">{% csrf_token %}{% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}{% for field in form %}<label for="{{ field.id_for_label }}">{{ field.label }}{% if field.name == "resume" %} <span class="required">*</span>{% endif %}</label>{{ field }}{% if field.help_text %}<small class="help-text">{{ field.help_text }}</small>{% endif %}{% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}{% endfor %}<p class="small muted">Resume requirements: PDF format, maximum 5 MB.</p><button class="button full" type="submit">Submit application →</button></form></div></section>
+{% endblock %}

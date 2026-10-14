@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Your dashboard · CareerConnect{% endblock %}
+{% block content %}
+<section class="container page-section"><div class="dashboard-welcome"><div><span class="eyebrow">JOB SEEKER DASHBOARD</span><h1>Welcome back, {{ user.first_name|default:user.username }}.</h1><p class="muted">Your next opportunity could be one application away.</p></div><a class="button" href="{% url 'home' %}">Find jobs →</a></div>
+<div class="stats-grid"><div class="stat-card"><span class="stat-label">Applications sent</span><strong>{{ application_count }}</strong><span class="stat-foot">Your career progress</span></div><div class="stat-card"><span class="stat-label">Latest opportunities</span><strong>{{ recent_jobs|length }}</strong><span class="stat-foot">Roles to explore</span></div></div>
+<div class="section-heading compact-heading"><div><h2>Recent applications</h2><p class="muted">Updates on your job search.</p></div><a class="text-link" href="{% url 'my_applications' %}">View all →</a></div>
+{% if applications %}<div class="table-wrap"><table><thead><tr><th>Role</th><th>Company</th><th>Date</th><th>Status</th></tr></thead><tbody>{% for app in applications %}<tr><td><a class="table-link" href="{% url 'job_detail' app.job.pk %}">{{ app.job.title }}</a></td><td>{{ app.job.company }}</td><td>{{ app.created_at|date:"M j, Y" }}</td><td><span class="status status-{{ app.status }}">{{ app.get_status_display }}</span></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-inline">No applications yet. <a href="{% url 'home' %}">Explore open roles.</a></div>{% endif %}
+<div class="section-heading compact-heading"><div><h2>Recently posted roles</h2><p class="muted">A few places to start.</p></div></div><div class="mini-job-grid">{% for job in recent_jobs %}<a class="mini-job" href="{% url 'job_detail' job.pk %}"><div class="company-logo">{{ job.company|first|upper }}</div><div><strong>{{ job.title }}</strong><span>{{ job.company }} · {{ job.location }}</span></div><span class="mini-arrow">↗</span></a>{% empty %}<p class="muted">No open roles yet.</p>{% endfor %}</div>
+</section>
+{% endblock %}

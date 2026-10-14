@@ -1,0 +1,40 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="CareerConnect — discover your next opportunity.">
+  <title>{% block title %}CareerConnect{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+<header class="site-header">
+  <nav class="nav container">
+    <a class="brand" href="{% url 'home' %}"><span class="brand-mark">C</span> CareerConnect</a>
+    <div class="nav-links">
+      <a href="{% url 'home' %}">Find jobs</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}">Dashboard</a>
+        {% if user.role == "seeker" %}<a href="{% url 'my_applications' %}">My applications</a>{% endif %}
+        {% if user.role == "employer" %}<a href="{% url 'employer_applications' %}">Applicants</a>{% endif %}
+        <span class="nav-user">{{ user.first_name|default:user.username }}</span>
+        <form class="inline-form" method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link-button" type="submit">Log out</button></form>
+      {% else %}
+        <a href="{% url 'login' %}">Log in</a>
+        <a class="button button-small" href="{% url 'register' %}">Get started</a>
+      {% endif %}
+    </div>
+  </nav>
+</header>
+<main>
+  {% if messages %}
+    <div class="container messages">
+      {% for message in messages %}<div class="message {{ message.tags }}">{{ message }}</div>{% endfor %}
+    </div>
+  {% endif %}
+  {% block content %}{% endblock %}
+</main>
+<footer class="footer"><div class="container footer-inner"><a class="brand footer-brand" href="{% url 'home' %}"><span class="brand-mark">C</span> CareerConnect</a><span>Find work that moves you forward.</span><span>© {% now "Y" %} CareerConnect</span></div></footer>
+</body>
+</html>

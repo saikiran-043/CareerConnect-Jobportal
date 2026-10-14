@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}{{ heading }} · CareerConnect{% endblock %}
+{% block content %}
+<section class="container form-page"><a class="back-link" href="{% url 'dashboard' %}">← Back to dashboard</a><div class="form-card form-card-wide"><span class="eyebrow">EMPLOYER WORKSPACE</span><h1>{{ heading }}</h1><p class="muted">Give candidates a clear picture of the role and your team.</p><form method="post" class="stack-form">{% csrf_token %}{% if form.non_field_errors %}<div class="form-errors">{{ form.non_field_errors }}</div>{% endif %}{% for field in form %}<div class="{% if field.field.widget.input_type == 'checkbox' %}checkbox-row{% endif %}"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<small class="help-text">{{ field.help_text }}</small>{% endif %}{% if field.errors %}<div class="field-errors">{{ field.errors }}</div>{% endif %}</div>{% endfor %}<button class="button full" type="submit">Save job listing →</button></form></div></section>
+{% endblock %}

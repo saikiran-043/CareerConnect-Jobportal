@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}My applications · CareerConnect{% endblock %}
+{% block content %}
+<section class="container page-section"><div class="section-heading"><div><span class="eyebrow">YOUR CAREER JOURNEY</span><h1>My applications</h1><p class="muted">Keep track of the roles you've applied for.</p></div><a class="button" href="{% url 'home' %}">Explore jobs →</a></div>
+{% if applications %}<div class="table-wrap"><table><thead><tr><th>Role</th><th>Company</th><th>Applied on</th><th>Status</th></tr></thead><tbody>{% for app in applications %}<tr><td><a class="table-link" href="{% url 'job_detail' app.job.pk %}">{{ app.job.title }}</a></td><td>{{ app.job.company }}</td><td>{{ app.created_at|date:"M j, Y" }}</td><td><span class="status status-{{ app.status }}">{{ app.get_status_display }}</span></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state"><div class="empty-icon">↗</div><h3>Your next opportunity is out there</h3><p>You haven't applied for any roles yet. Browse the latest openings to get started.</p><a class="button" href="{% url 'home' %}">Browse jobs</a></div>{% endif %}</section>
+{% endblock %}
